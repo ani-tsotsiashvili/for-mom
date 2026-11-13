@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>სტატუსი: წინსვლა და თანადგომა</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top right, #1e293b 0%, #090d16 100%);
+            font-family: 'Georgia', serif;
+            color: #f8fafc;
+            box-sizing: border-box;
+        }
+
+        #toggleCard {
+            display: none;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 375px;
+            min-height: 470px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* საწყისი მინიმალისტური ბარათი */
+        .cover-box {
+            position: absolute;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.92);
+            border: 1px solid #475569;
+            border-radius: 12px;
+            padding: 30px 24px;
+            box-sizing: border-box;
+            text-align: left;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .cover-box:hover {
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+        }
+
+        #toggleCard:checked ~ .cover-box {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .status-tag {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .subtle-icons {
+            font-size: 16px;
+            opacity: 0.85;
+            letter-spacing: 4px;
+        }
+
+        .cover-title {
+            font-size: 20px;
+            font-weight: normal;
+            color: #f1f5f9;
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+
+        .cover-sub {
+            font-size: 13px;
+            color: #94a3b8;
+            margin: 0 0 24px 0;
+            line-height: 1.5;
+        }
+
+        .open-btn {
+            display: inline-block;
+            font-size: 13px;
+            color: #f8fafc;
+            border: 1px solid #64748b;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .cover-box:hover .open-btn {
+            background: #334155;
+        }
+
+        /* გახსნილი მთავარი ტექსტი */
+        .message-card {
+            position: relative;
+            width: 100%;
+            background: #f8fafc;
+            color: #1e293b;
+            border-radius: 12px;
+            padding: 24px 22px;
+            box-sizing: border-box;
+            text-align: left;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            transition: all 0.6s ease 0.15s;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
+        }
+
+        #toggleCard:checked ~ .message-card {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .card-header {
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: #0f172a;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .card-header span {
+            font-size: 12px;
+            color: #64748b;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .header-cat {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .message-card p {
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #334155;
+            margin: 0 0 13px 0;
+        }
+
+        .fact-box {
+            background: #e2e8f0;
+            border-left: 3px solid #0f172a;
+            padding: 11px 14px;
+            border-radius: 0 6px 6px 0;
+            margin: 14px 0;
+        }
+
+        .fact-title {
+            font-size: 11.5px;
+            font-weight: bold;
+            color: #0f172a;
+            margin: 0 0 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .fact-box p {
+            font-size: 12.5px;
+            line-height: 1.5;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        /* Queen & წიგნის მინიმალისტური დეტალი */
+        .queen-note {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin: 14px 0;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .queen-quote {
+            font-style: italic;
+            color: #f8fafc;
+            letter-spacing: 0.3px;
+        }
+
+        .queen-tag {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .footer-note {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #cbd5e1;
+            font-size: 12.5px;
+            color: #475569;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .author {
+            font-weight: bold;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <input type="checkbox" id="toggleCard">
+
+    <!-- საწყისი ბარათი -->
+    <label for="toggleCard" class="cover-box">
+        <div class="top-row">
+            <div class="status-tag">კავშირი • მანძილის მიუხედავად</div>
+            <div class="subtle-icons">📖 🐈‍⬛</div>
+        </div>
+        <h1 class="cover-title">მოკლე ჩანაწერი საქართველოში</h1>
+        <p class="cover-sub">არანაირი ზედმეტი სიტყვა — მხოლოდ ფაქტები და მიმდინარე პროცესი.</p>
+        <div class="open-btn">გახსნა →</div>
+    </label>
+
+    <!-- გახსნილი წერილი -->
+    <div class="message-card">
+        <div class="card-header">
+            <div>
+                <h2>დედა,</h2>
+                <span>პირველი კოდი, რომელიც თავად შევქმენი</span>
+            </div>
+            <div class="header-cat">🐈‍⬛</div>
+        </div>
+
+        <p>
+            ბევრი საუბარი არცერთს გვჩვევია — ორივემ ვიცით, რომ საქმე და რეალური ნაბიჯები ბევრად მეტს ამბობს, ვიდრე სიტყვები.
+        </p>
+
+        <div class="fact-box">
+            <div class="fact-title">📖 მიმდინარე პროცესი</div>
+            <p>
+                აქ, შორს ყოფნისას, ყოველდღე ვცდილობ ახალი ვისწავლო, გავიზარდო როგორც ადამიანი და პროფესიონალი. ეს გვერდიც ჩემი ახალი ნაბიჯია ტექნოლოგიებისა და კარიერული განვითარებისკენ.
+            </p>
+        </div>
+
+        <p>
+            ვიცი, რომ სულ საქმეში ხარ და შენი შინაგანი სიმტკიცე ჩემთვისაც მთავარი საყრდენი და მაგალითია. მეორე წელია ერთმანეთი არ გვინახავს, მაგრამ მანძილი არაფერს ცვლის — ჩემს ფიქრებში ყოველთვის ხარ.
+        </p>
+
+        <div class="queen-note">
+            <span class="queen-quote">„The Show Must Go On“ 👑</span>
+            <span class="queen-tag">Queen</span>
+        </div>
+
+        <p style="font-weight: bold; color: #0f172a; margin-bottom: 0;">
+            შორიდანაც შენი მთავარი გულშემატკივარი ვარ. ენერგია და წარმატება ყველა შენს საქმეში.
+        </p>
+
+        <div class="footer-note">
+            <span>მშვიდი და პროდუქტიული დღეები</span>
+            <span class="author">— ანი</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
